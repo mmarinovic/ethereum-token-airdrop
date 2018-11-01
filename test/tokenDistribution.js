@@ -83,7 +83,6 @@ contract('TokenDistribution', (accs) => {
     it('remaining airdrop supply decreesed after airdrop', async () => {
       const remainingTotalSupplyOnContract = await instance.remainingTotalSupply({from: owner});
       const expectedTotalSupply = remainingTotalSupply - (addresses.length * 500);
-      console.log("address", addresses.length, addresses.length * 500)
       assert.equal(remainingTotalSupplyOnContract.toNumber(), expectedTotalSupply);
     });
 });
