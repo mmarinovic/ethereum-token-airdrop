@@ -1,0 +1,20 @@
+{
+    "name": "airdrop",
+    "version": "0.0.1",
+    "description": "Eth Token Airdrop Contract",
+    "main": "truffle-config.js",
+    "directories": {
+        "test": "test"
+    },
+    "dependencies": {
+        "ganache-cli": "6.1.0",
+        "mmarinovic-ethereumisc": "^1.1.1",
+        "solidity-coverage": "0.5.4",
+        "truffle": "4.1.11",
+        "web3": "^1.0.0-beta.36"
+    },
+    "scripts": {
+        "test": "./node_modules/.bin/truffle test",
+        "test-cov": "./node_modules/.bin/solidity-coverage"
+    }
+}

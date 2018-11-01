@@ -17,9 +17,9 @@ contract TokenDistribution is Ownable{
     uint private decimalFactor = 10 ** decimals;
 
     uint private airdropAmount = 500;
-    uint private remainingAllocationForDevelopers = 1000000;
-    uint private remainingAllocationForPresale = 3000000;
-    uint private remainingTotalSupply = totalSupply - remainingAllocationForDevelopers - remainingAllocationForPresale;
+    uint public remainingAllocationForDevelopers = 1000000;
+    uint public remainingAllocationForPresale = 3000000;
+    uint public remainingTotalSupply = totalSupply - remainingAllocationForDevelopers - remainingAllocationForPresale;
 
     mapping(address => Allocation) public allocations;
     mapping(address => bool) public airdrops;

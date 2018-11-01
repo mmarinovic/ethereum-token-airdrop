@@ -35,7 +35,12 @@ contract('TokenDistribution', (accs) => {
     const accounts = accs;
     let owner = accs[0];
     let instance, token;
-    
+
+    const totalSupply = 10000000;
+    let remainingAllocationForDevelopers = 1000000;
+    let remainingAllocationForPresale = 3000000;
+    let remainingTotalSupply = totalSupply - remainingAllocationForDevelopers - remainingAllocationForPresale;
+
     let timeOffset = 3600 * 24 * 10; // 10 days
     let startTime = new Date().getTime() / 1000 + timeOffset;
 
@@ -43,22 +48,42 @@ contract('TokenDistribution', (accs) => {
         instance = await TokenDistribution.new(startTime, {from: owner});
         token = FixedSupplyToken.at(await instance.token());
 
-        await moveToFuture(timeOffset + 1);
+        await moveToFuture(timeOffset + 100);
         await mineBlock();
     });
 
+    let addresses = [];
+    for(let i = 0; i<10; i++){
+        addresses.push(web3.eth.accounts.create().address);
+    }
+
+    it('deploys with correct data', async() => {
+      const startTime = await instance.startTime();
+      const remainingTotalSupply = await instance.remainingTotalSupply();
+      assert.equal(startTime.toNumber(), startTime);
+      assert.equal(remainingTotalSupply.toNumber(), remainingTotalSupply);
+    });
+
     it('can airdrop to many addresses', async () => {
-
-        let addresses = [];
-        for(let i = 0; i<2; i++){
-            addresses.push(web3.eth.accounts.create().address);
-        }
-
+      try{
         await instance.airdrop(addresses, {from: owner});
-        
-        for(let i = 0; i<addresses.length; i++){
+      }catch(e){
+        assert.isTrue(false);
+      }
+      assert.isTrue(true);
+    });
+
+    it('addresses received tokens after airdrop', async () => {
+        for(let i = 0; i < addresses.length; i++){
             let amount = await token.balanceOf(addresses[i]);
             assert.equal(amount.toString(10), "500000000000000000000");
         }
+    });
+
+    it('remaining airdrop supply decreesed after airdrop', async () => {
+      const remainingTotalSupplyOnContract = await instance.remainingTotalSupply({from: owner});
+      const expectedTotalSupply = remainingTotalSupply - (addresses.length * 500);
+      console.log("address", addresses.length, addresses.length * 500)
+      assert.equal(remainingTotalSupplyOnContract.toNumber(), expectedTotalSupply);
     });
 });
