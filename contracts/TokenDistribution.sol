@@ -11,7 +11,7 @@ contract TokenDistribution is Ownable{
 
     uint public startTime;
 
-    FixedSupplyToken private token;
+    FixedSupplyToken public token;
     uint private totalSupply = 10000000;
     uint private decimals = 18;
     uint private decimalFactor = 10 ** decimals;
@@ -21,8 +21,8 @@ contract TokenDistribution is Ownable{
     uint private remainingAllocationForPresale = 3000000;
     uint private remainingTotalSupply = totalSupply - remainingAllocationForDevelopers - remainingAllocationForPresale;
 
-    mapping(address => Allocation) private allocations;
-    mapping(address => bool) private airdrops;
+    mapping(address => Allocation) public allocations;
+    mapping(address => bool) public airdrops;
 
     enum AllocationType {
         Developers,
@@ -94,5 +94,5 @@ contract TokenDistribution is Ownable{
         allocations[msg.sender].amountClaimed = allocations[msg.sender].amountClaimed.sub(_amountToClaim);
         require(token.transfer(msg.sender, _amountToClaim));
         emit AllocationClaimed(msg.sender, _amountToClaim);
-    } 
+    }
 }
