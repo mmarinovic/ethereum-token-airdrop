@@ -64,20 +64,36 @@ contract('TokenDistribution', (accs) => {
       assert.equal(remainingTotalSupply.toNumber(), remainingTotalSupply);
     });
 
-    it('can airdrop to many addresses', async () => {
+    it('non-owner owner cant airdrop', async () => {
+      try{
+        await instance.airdrop(addresses, {from: accounts[2]});
+        assert.isTrue(false);
+      }catch(e){
+        assert.isTrue(true);
+      }
+    });
+
+    it('owner can airdrop to many addresses', async () => {
       try{
         await instance.airdrop(addresses, {from: owner});
+        assert.isTrue(true);
       }catch(e){
         assert.isTrue(false);
       }
-      assert.isTrue(true);
     });
 
     it('addresses received tokens after airdrop', async () => {
-        for(let i = 0; i < addresses.length; i++){
-            let amount = await token.balanceOf(addresses[i]);
-            assert.equal(amount.toString(10), "500000000000000000000");
-        }
+      for(let i = 0; i < addresses.length; i++){
+          let amount = await token.balanceOf(addresses[i]);
+          assert.equal(amount.toString(10), "500000000000000000000");
+      }
+    });
+
+    it('addreses marked as airdroped after airdrop', async () => {
+      for(let i = 0; i < addresses.length; i++){
+        let isAirdroped = await instance.airdrops(addresses[i]);
+        assert.isTrue(isAirdroped);
+      }
     });
 
     it('remaining airdrop supply decreesed after airdrop', async () => {
