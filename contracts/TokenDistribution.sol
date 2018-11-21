@@ -1,8 +1,7 @@
 pragma solidity ^0.4.23;
 
-import "mmarinovic-ethereumisc/contracts/Erc20.sol";
-import "mmarinovic-ethereumisc/contracts/Ownable.sol";
-import "mmarinovic-ethereumisc/library/SafeMath.sol";
+import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
+import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "./FixedSupplyToken.sol";
 
 contract TokenDistribution is Ownable{

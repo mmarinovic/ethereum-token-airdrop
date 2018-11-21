@@ -8,7 +8,7 @@
     },
     "dependencies": {
         "ganache-cli": "6.1.0",
-        "mmarinovic-ethereumisc": "^1.1.1",
+        "openzeppelin-solidity": "^2.0.0",
         "solidity-coverage": "0.5.4",
         "truffle": "4.1.11",
         "web3": "^1.0.0-beta.36"

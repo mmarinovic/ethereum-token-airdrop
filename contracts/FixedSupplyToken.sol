@@ -1,10 +1,10 @@
 pragma solidity ^0.4.23;
 
-import "mmarinovic-ethereumisc/contracts/Erc20.sol";
+import "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
 
 interface tokenRecipient { function receiveApproval(address _from, uint256 _value, address _token, bytes _extraData) external; }
 
-contract FixedSupplyToken is Erc20 {
+contract FixedSupplyToken is IERC20 {
 
     string public name = "Fixed Supply Token";
     string public symbol = "FST";
@@ -13,16 +13,32 @@ contract FixedSupplyToken is Erc20 {
     uint public decimalFactor;
     uint public totalSupply;
 
-    constructor(address _distributionContractAddress, uint _totalSupply, uint _decimals) public {
+    uint private _totalSupply;
+    mapping(address => uint) private _balanceOf;
+    mapping(address => mapping(address => uint)) private _allowance;
+
+    constructor(address _distributionContractAddress, uint _totalSup, uint _decimals) public {
         require(_distributionContractAddress != address(0));
-        require(_totalSupply > 0);
+        require(_totalSup > 0);
 
         decimals = _decimals;
         decimalFactor = 10 ** _decimals;
-        totalSupply = 10000000 * decimalFactor;
+        _totalSupply = _totalSup * decimalFactor;
 
-        balanceOf[_distributionContractAddress] = totalSupply;
-        emit Transfer(address(0), _distributionContractAddress, totalSupply);
+        _balanceOf[_distributionContractAddress] = totalSupply;
+        emit Transfer(address(0), _distributionContractAddress, _totalSupply);
+    }
+
+    function totalSupply() external view returns (uint256){
+        return _totalSupply;
+    }
+
+    function balanceOf(address who) external view returns (uint256){
+        return _balanceOf[who];
+    }
+
+    function allowance(address owner, address spender) external view returns (uint256){
+        return _allowance[owner][spender];
     }
 
     function transfer(address to, uint value) public returns (bool success){
@@ -31,16 +47,16 @@ contract FixedSupplyToken is Erc20 {
     }
 
     function transferFrom(address from, address to, uint value) public returns (bool success){
-        require(value <= allowance[from][msg.sender]);
+        require(value <= _allowance[from][msg.sender]);
 
-        allowance[from][msg.sender] -= value;
+        _allowance[from][msg.sender] -= value;
         _transfer(from, to, value);
 
         return true;
     }
 
     function approve(address spender, uint value) public returns (bool succes) {
-        allowance[msg.sender][spender] = value;
+        _allowance[msg.sender][spender] = value;
         return true;
     }
 
@@ -60,16 +76,16 @@ contract FixedSupplyToken is Erc20 {
 
     function _transfer(address from, address to, uint value) internal{
         require(to != 0x0);
-        require(balanceOf[from] >= value);
-        require(balanceOf[to] + value >= balanceOf[to]);
+        require(_balanceOf[from] >= value);
+        require(_balanceOf[to] + value >= _balanceOf[to]);
 
-        uint previousBalance = balanceOf[from] + balanceOf[to];
+        uint previousBalance = _balanceOf[from] + _balanceOf[to];
 
-        balanceOf[from] -= value;
-        balanceOf[to] += value;
+        _balanceOf[from] -= value;
+        _balanceOf[to] += value;
 
         emit Transfer(from, to, value);
 
-        assert(balanceOf[from] + balanceOf[to] == previousBalance);
+        assert(_balanceOf[from] + _balanceOf[to] == previousBalance);
     }
 }
