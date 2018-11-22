@@ -11,7 +11,6 @@ contract FixedSupplyToken is IERC20 {
 
     uint public decimals;
     uint public decimalFactor;
-    uint public totalSupply;
 
     uint private _totalSupply;
     mapping(address => uint) private _balanceOf;
@@ -25,7 +24,7 @@ contract FixedSupplyToken is IERC20 {
         decimalFactor = 10 ** _decimals;
         _totalSupply = _totalSup * decimalFactor;
 
-        _balanceOf[_distributionContractAddress] = totalSupply;
+        _balanceOf[_distributionContractAddress] = _totalSupply;
         emit Transfer(address(0), _distributionContractAddress, _totalSupply);
     }
 

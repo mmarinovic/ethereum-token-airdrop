@@ -101,4 +101,12 @@ contract('TokenDistribution', (accs) => {
       const expectedTotalSupply = remainingTotalSupply - (addresses.length * 500);
       assert.equal(remainingTotalSupplyOnContract.toNumber(), expectedTotalSupply);
     });
+
+    it('owner cant airdrop to same addresses again', async () => {
+      await instance.airdrop(addresses, {from: owner});
+      for(let i = 0; i < addresses.length; i++){
+        let amount = await token.balanceOf(addresses[i]);
+        assert.equal(amount.toString(10), "500000000000000000000");
+      }
+    });
 });
