@@ -31,9 +31,21 @@ const mineBlock = () => {
     });
   })
 }
+
+const mapAllocation = (contractResp) => {
+  return {
+    amount: contractResp[0].toNumber(),
+    allocationType: contractResp[1].toNumber(),
+    lockedUntil: contractResp[2].toNumber(),
+    amountClaimed: contractResp[3].toNumber()
+  }
+}
+
 contract('TokenDistribution', (accs) => {
     const accounts = accs;
     let owner = accs[0];
+    let developerAllocationAddr = accs[2];
+    let presaleAllocationAddr = accs[3];
     let instance, token;
 
     const totalSupply = 10000000;
@@ -108,5 +120,37 @@ contract('TokenDistribution', (accs) => {
         let amount = await token.balanceOf(addresses[i]);
         assert.equal(amount.toString(10), "500000000000000000000");
       }
+    });
+
+    it('owner can add allocation with type developer', async () => {
+      let developerAllocationType = 0;
+      let lockedUntil = parseInt(new Date().getTime() / 1000 + (3600 * 24 * 15), 10); // 15 days
+      await instance.addAllocation(developerAllocationAddr, 100, developerAllocationType, lockedUntil);
+
+      let allocationResp = await instance.allocations(developerAllocationAddr);
+      let allocation = mapAllocation(allocationResp);
+      assert.equal(allocation.amount, 100);
+      assert.equal(allocation.allocationType, developerAllocationType);
+      assert.equal(allocation.lockedUntil, lockedUntil);
+      assert.equal(allocation.amountClaimed, 0);
+
+      let remainingAllocationForDevs = await instance.remainingAllocationForDevelopers();
+      assert.equal(remainingAllocationForDevs.toString(10), 999900)
+    });
+
+    it('owner can add allocation with type presale', async () => {
+      let presaleAllocationType = 1;
+      let lockedUntil = parseInt(new Date().getTime() / 1000 + (3600 * 24 * 15), 10); // 15 days
+      await instance.addAllocation(presaleAllocationAddr, 200, presaleAllocationType, lockedUntil);
+
+      let allocationResp = await instance.allocations(presaleAllocationAddr);
+      let allocation = mapAllocation(allocationResp);
+      assert.equal(allocation.amount, 200);
+      assert.equal(allocation.allocationType, presaleAllocationType);
+      assert.equal(allocation.lockedUntil, lockedUntil);
+      assert.equal(allocation.amountClaimed, 0);
+
+      let remainingAllocationForPresale = await instance.remainingAllocationForPresale();
+      assert.equal(remainingAllocationForPresale.toString(10), 2999800)
     });
 });
