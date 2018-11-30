@@ -462,4 +462,62 @@ export class TokenDistribution extends SoltsiceContract {
             }
         });
     
+    // tslint:disable-next-line:member-ordering
+    public getState = Object.assign(
+        // tslint:disable-next-line:max-line-length
+        // tslint:disable-next-line:variable-name
+        ( txParams?: W3.TX.TxParams, privateKey?: string): Promise<W3.TX.TransactionResult> => {
+            if (!privateKey) {
+                return new Promise((resolve, reject) => {
+                    this._instance.getState( txParams || this._sendParams)
+                        .then((res: any) => resolve(res))
+                        .catch((err: any) => reject(err));
+                });
+            } else {
+                // tslint:disable-next-line:max-line-length
+                return this.w3.sendSignedTransaction(this.address, privateKey, this._instance.getState.request().params[0].data, txParams || this._sendParams, undefined)
+                    .then(txHash => {
+                        return this.waitTransactionReceipt(txHash);
+                    });
+            }
+        },
+        {
+            // tslint:disable-next-line:max-line-length
+            // tslint:disable-next-line:variable-name
+            sendTransaction: Object.assign(( txParams?: W3.TX.TxParams): Promise<string> => {
+                    return new Promise((resolve, reject) => {
+                        this._instance.getState.sendTransaction( txParams || this._sendParams)
+                            .then((res: any) => resolve(res))
+                            .catch((err: any) => reject(err));
+                    });
+                },
+                {
+                    // tslint:disable-next-line:max-line-length
+                    // tslint:disable-next-line:variable-name
+                    sendSigned: ( privateKey: string, txParams?: W3.TX.TxParams, nonce?: number): Promise<string> => {
+                        // tslint:disable-next-line:max-line-length
+                        return this.w3.sendSignedTransaction(this.address, privateKey, this._instance.getState.request().params[0].data, txParams || this._sendParams, nonce);
+                    }
+                }
+            )
+        },
+        {
+            // tslint:disable-next-line:max-line-length
+            // tslint:disable-next-line:variable-name
+            data: (): Promise<string> => {
+                return new Promise((resolve, reject) => {
+                    resolve(this._instance.getState.request().params[0].data);
+                });
+            }
+        },
+        {
+            // tslint:disable-next-line:max-line-length
+            // tslint:disable-next-line:variable-name
+            estimateGas: (): Promise<number> => {
+                return new Promise((resolve, reject) => {
+                    this._instance.getState.estimateGas().then((g: any) => resolve(g)).catch((err: any) => reject(err));
+                });
+            }
+        });
+    
 }
