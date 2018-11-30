@@ -90,7 +90,7 @@ contract TokenDistribution is Ownable{
         require(allocations[msg.sender].lockedUntil < now);
         require(allocations[msg.sender].amount > allocations[msg.sender].amountClaimed);
 
-        allocations[msg.sender].amountClaimed = allocations[msg.sender].amountClaimed.sub(_amountToClaim);
+        allocations[msg.sender].amountClaimed = allocations[msg.sender].amount.sub(_amountToClaim);
         require(token.transfer(msg.sender, _amountToClaim));
         emit AllocationClaimed(msg.sender, _amountToClaim);
     }

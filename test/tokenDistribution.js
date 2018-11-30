@@ -153,4 +153,47 @@ contract('TokenDistribution', (accs) => {
       let remainingAllocationForPresale = await instance.remainingAllocationForPresale();
       assert.equal(remainingAllocationForPresale.toString(10), 2999800)
     });
+
+    it('owner cant add allocation with non existing type', async () => {
+      try{
+        let lockedUntil = parseInt(new Date().getTime() / 1000 + (3600 * 24 * 15), 10); // 15 days
+        await instance.addAllocation(owner, 200, 999, lockedUntil);
+        assert(false);
+      }catch(e){
+        assert(true);
+      }
+    });
+
+    it('cant withdrawl allocation ahead of time', async() => {
+      try{
+        await instance.withdrawAllocation(100, { from: developerAllocationAddr });
+        assert(false);
+      }catch(e){
+        assert(true);
+      }
+    });
+
+    it('cant withdraw more than allocated', async() => {
+      try{
+        await instance.withdrawAllocation(110, { from: developerAllocationAddr });
+        assert(false);
+      }catch(e){
+        assert(true);
+      }
+    });
+
+    it('can withdraw allocation', async() => {
+      await moveToFuture(3600 * 24 * 20); //20 days
+      await mineBlock();
+
+      //withdraw half
+      await instance.withdrawAllocation(50, { from: developerAllocationAddr });
+
+      let amount = await token.balanceOf(developerAllocationAddr);
+      assert.equal(amount.toString(10), "50");
+
+      let allocationResp = await instance.allocations(developerAllocationAddr);
+      let allocation = mapAllocation(allocationResp);
+      assert.equal(allocation.amountClaimed, 50);
+    });
 });
