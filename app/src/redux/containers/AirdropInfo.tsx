@@ -4,19 +4,27 @@ import { connect } from 'react-redux';
 import * as CA from '../actions/contract';
 import * as N from '../namespace';
 import { IContractState } from  '../../types/contract';
+import { bindActionCreators, Dispatch } from 'redux';
 
-interface IProps {
+interface IActionProps{
+    getContractState: typeof CA.getContractState
+}
+
+interface IStateProps {
     contractState: IContractState
 }
 
+type IProps = IActionProps & IStateProps;
+
 class AirdropInfo extends React.Component<IProps> {
+    public state = {};
 
     public componentDidMount(){
-        CA.getContractState();
+        console.log("init")
+        this.props.getContractState();
     }
 
     public render(){
-        console.log(this.props.contractState)
         return (
             <div>
                 <h4>Contract state</h4>
@@ -25,9 +33,14 @@ class AirdropInfo extends React.Component<IProps> {
     }
 }
 
-function mapStateToProps(state: N.IReduxState){
-    console.log(state)
+function mapStateToProps(state: N.IReduxState): IStateProps {
     return { contractState: state.contractState };
 }
 
-export default connect(mapStateToProps)(AirdropInfo);
+function mapDispatchToProps(dispatch: Dispatch): IActionProps {
+    return bindActionCreators({
+        getContractState: CA.getContractState
+      }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AirdropInfo);

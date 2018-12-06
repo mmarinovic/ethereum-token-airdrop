@@ -1,5 +1,5 @@
 import * as React from 'react';
-import './App.css';
+import AirdropInfo from './redux/containers/AirdropInfo';
 
 class App extends React.Component {
   public render() {
@@ -8,6 +8,9 @@ class App extends React.Component {
         <header className="App-header">
           <h1 className="App-title">Token airdrop manager</h1>
         </header>
+        <div className="Content">
+          <AirdropInfo />
+        </div>
       </div>
     );
   }
