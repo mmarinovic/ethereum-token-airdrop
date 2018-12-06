@@ -94,4 +94,6 @@ contract TokenDistribution is Ownable{
         require(token.transfer(msg.sender, _amountToClaim));
         emit AllocationClaimed(msg.sender, _amountToClaim);
     }
+
+    function getState() public returns(uint startTime, uint remainingAllocationForDevelopers, uint remainingAllocationForPresale, uint remainingTotalSupply){}
 }

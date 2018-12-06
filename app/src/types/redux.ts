@@ -1,5 +1,5 @@
 export interface IPayloadWrapper<T> {
-    payload: T;
+    payload?: T;
 }
   
 export interface ISimpleAction<T> {

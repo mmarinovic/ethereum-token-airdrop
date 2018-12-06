@@ -1,9 +1,22 @@
-import { Component} from 'react';
+import * as React from 'react';
 import { connect } from 'react-redux';
 
-class AirdropInfo extends Component {
+import * as CA from '../actions/contract';
+import * as N from '../namespace';
+import { IContractState } from  '../../types/contract';
+
+interface IProps {
+    contractState: IContractState
+}
+
+class AirdropInfo extends React.Component<IProps> {
+
+    public componentDidMount(){
+        CA.getContractState();
+    }
 
     public render(){
+        console.log(this.props.contractState)
         return (
             <div>
                 <h4>Contract state</h4>
@@ -12,8 +25,9 @@ class AirdropInfo extends Component {
     }
 }
 
-function mapStateToProps({ web3 }){
-    return { web3 };
+function mapStateToProps(state: N.IReduxState){
+    console.log(state)
+    return { contractState: state.contractState };
 }
 
 export default connect(mapStateToProps)(AirdropInfo);

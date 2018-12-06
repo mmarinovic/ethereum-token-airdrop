@@ -1,4 +1,4 @@
-interface Window{
+interface Window {
     web3: {
         currentProvider: any
     }

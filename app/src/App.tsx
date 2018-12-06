@@ -1,14 +1,7 @@
 import * as React from 'react';
 import './App.css';
 
-import { unlockWithMetaMask } from './redux/actions/web3Actions';
-
 class App extends React.Component {
-
-  public componentDidMount(){
-    unlockWithMetaMask();
-  }
-
   public render() {
     return (
       <div className="App">

@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 
-import contractStateReducer from './contractStateReducer';
+import contractStateReducer from './contractState';
 
 const rootReducer = combineReducers({
   contractState: contractStateReducer
