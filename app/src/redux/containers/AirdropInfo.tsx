@@ -20,14 +20,28 @@ class AirdropInfo extends React.Component<IProps> {
     public state = {};
 
     public componentDidMount(){
-        console.log("init")
         this.props.getContractState();
     }
 
     public render(){
+        console.log(this.props.contractState)
         return (
             <div>
                 <h4>Contract state</h4>
+                <ul>
+                    <li>
+                        Start time: {this.props.contractState.startTime.toLocaleString()}
+                    </li>
+                    <li>
+                        Remaining total supply: {this.props.contractState.remainingTotalSupply}
+                    </li>
+                    <li>
+                        Remaining allocation for developers: {this.props.contractState.remainingAllocationForDevelopers}
+                    </li>
+                    <li>
+                        Remaining allocation for presale: {this.props.contractState.remainingAllocationForPresale}
+                    </li>
+                </ul>
             </div>
         );
     }
