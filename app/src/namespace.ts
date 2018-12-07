@@ -1,5 +1,5 @@
-import { IAction, ISimpleAction } from '../types/redux';
-import { IContractState } from  '../types/contract';
+import { IAction, ISimpleAction } from './types/redux';
+import { IContractState } from  './types/contract';
 
 export interface IReduxState {
     contractState: IContractState

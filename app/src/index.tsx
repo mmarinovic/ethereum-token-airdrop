@@ -9,8 +9,8 @@ import registerServiceWorker from './registerServiceWorker';
 import { Provider } from 'react-redux';
 import { applyMiddleware, createStore, compose } from 'redux';
 
-import reducers from './redux/reducers';
-import { watchSaga } from './redux/sagas';
+import reducers from './reducers';
+import { watchSaga } from './sagas';
 
 const composeEnhancers = typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?   
     window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({}) : compose;
