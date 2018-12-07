@@ -3,8 +3,10 @@ import { connect } from 'react-redux';
 
 import * as CA from '../actions/contract';
 import * as N from '../namespace';
-import { IContractState } from  '../../types/contract';
+import { IContractState } from  '../types/contract';
 import { bindActionCreators, Dispatch } from 'redux';
+
+import './AirdropInfo.scss';
 
 interface IActionProps{
     getContractState: typeof CA.getContractState
@@ -24,10 +26,9 @@ class AirdropInfo extends React.Component<IProps> {
     }
 
     public render(){
-        console.log(this.props.contractState)
         return (
-            <div>
-                <h4>Contract state</h4>
+            <header className="airdrop-info">
+                <h1>Token distribution manager</h1>
                 <ul>
                     <li>
                         Start time: {this.props.contractState.startTime.toLocaleString()}
@@ -42,7 +43,7 @@ class AirdropInfo extends React.Component<IProps> {
                         Remaining allocation for presale: {this.props.contractState.remainingAllocationForPresale}
                     </li>
                 </ul>
-            </div>
+            </header>
         );
     }
 }
