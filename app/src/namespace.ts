@@ -8,5 +8,7 @@ export interface IReduxState {
 export type GetContractStateAction = IAction<'GET_CONTRACT_STATE', IContractState>;
 export type InitGetContractStateAction = ISimpleAction<'INIT_GET_CONTRACT_STATE'>;
 
+export type InitAirdrop = IAction<'INIT_AIRDROP', string[]>;
+
 export type Action = GetContractStateAction;
-export type InitAction = InitGetContractStateAction
+export type InitAction = InitGetContractStateAction & InitAirdrop;
