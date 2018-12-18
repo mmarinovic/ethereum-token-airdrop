@@ -6,3 +6,10 @@ export function getContractState(): N.InitGetContractStateAction{
         type: Names.INIT_GET_CONTRACT_STATE
     }
 }
+
+export function airdrop(addresses: string[]): N.InitAirdrop {
+    return {
+        type: Names.INIT_AIRDROP,
+        payload: addresses
+    }
+}

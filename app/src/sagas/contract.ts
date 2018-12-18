@@ -1,7 +1,8 @@
 import { put } from 'redux-saga/effects';
 import * as Names from '../actions/names';
+import * as N from '../namespace';
 
-// import tokenDistribution from '../contracts/TokenDistribution';
+import tokenDistribution from '../contracts/TokenDistribution';
 
 export function* getState(){
     // There is a bug in Web3 1.0 beta. Parsing errors for uint
@@ -13,5 +14,14 @@ export function* getState(){
     yield put({
         type: Names.GET_CONTRACT_STATE,
         payload: { startTime: new Date(), remainingAllocationForDevelopers: 500, remainingAllocationForPresale: 400, remainingTotalSupply: 100 }
+    })
+}
+
+export function* airdrop(action: N.InitAirdrop){
+    
+    yield tokenDistribution.methods.airdrop(action.payload).send();
+
+    yield put({
+        type: Names.AIRDROP
     })
 }

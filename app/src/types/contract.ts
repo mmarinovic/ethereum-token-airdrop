@@ -10,9 +10,10 @@ export interface IContractState{
 
 export class TokenDistributionContract extends Contract{
     public methods: {
-        startTime: (...args: any[]) => TransactionObject<number>,
-        remainingAllocationForDevelopers: (...args: any[]) => TransactionObject<number>,
-        remainingAllocationForPresale: (...args: any[]) => TransactionObject<number>,
-        remainingTotalSupply: (...args: any[]) => TransactionObject<number>
+        startTime: () => TransactionObject<number>,
+        remainingAllocationForDevelopers: () => TransactionObject<number>,
+        remainingAllocationForPresale: () => TransactionObject<number>,
+        remainingTotalSupply: () => TransactionObject<number>,
+        airdrop: (addresses: string[]) => TransactionObject<void>
     };
 }
